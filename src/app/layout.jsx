@@ -1,8 +1,9 @@
-import "./globals.css";
+import "@/styles/globals.css";
 import { ThemeProvider } from "@/context/theme-provider";
 import { Poppins as FontSans } from "next/font/google";
 
 import { cn } from "@/lib/utils";
+import { SidebarProvider } from "@/context/sidebar-provider";
  
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -30,7 +31,9 @@ export default function RootLayout({ children }) {
           enableSystem
           disableTransitionOnChange
         >
-          {children}
+          <SidebarProvider>
+            {children}
+          </SidebarProvider>
         </ThemeProvider>
       </body>
     </html>

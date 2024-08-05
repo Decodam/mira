@@ -1,0 +1,181 @@
+'use client';
+
+import Image from "next/image";
+import Link from "next/link";
+import { useState, useEffect } from "react";
+import { useParams } from 'next/navigation'
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  IconSettings,
+  IconCoin,
+  IconLogout,
+  IconQuestionMark,
+  IconLayoutSidebar,
+  IconStethoscope,
+  IconPlus,
+  IconLayoutGrid,
+  IconSearch,
+} from "@tabler/icons-react";
+import { Button } from "./ui/button";
+import { ToggleTheme } from "./ui/toggle-theme";
+import { Squeeze as Hamburger } from 'hamburger-react';
+
+export default function ChatLayout({ children }) {
+  const [searchOn, setSearchOn] = useState(false);
+  const [searchField, setSearchField] = useState('');
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+
+  const params = useParams()
+  const activeChatId = params?.id; // Extract the id from the route parameters
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 768) {
+        setSidebarCollapsed(false); // Open sidebar on large screens
+      } else {
+        setSidebarCollapsed(true); // Close sidebar on small screens
+      }
+    };
+
+    // Call handleResize on initial render
+    handleResize();
+
+    // Add event listener to handle resize
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+  const chatHistory = [
+    { id: 1, name: 'Consultation about flu' },
+    { id: 2, name: 'Project discussion' },
+    { id: 3, name: 'Advice on diet' },
+    { id: 4, name: 'Immediate help needed' },
+    // Add more chat items as needed
+  ];
+
+  const filteredChats = chatHistory.filter(chat =>
+    chat.name.toLowerCase().includes(searchField.toLowerCase())
+  );
+
+  return (
+    <>
+      <div className="chat-header fixed w-full top-0 left-0 z-10 h-14 flex">
+        {/* Sidebar Segment */}
+        <div className={`transition-all duration-300 ${sidebarCollapsed ? "w-auto" : "md:w-60"} flex gap-2 justify-between items-center px-4`}>
+          <Button variant="outline" size="icon" onClick={() => setSidebarCollapsed(!sidebarCollapsed)}>
+            <IconLayoutSidebar className="hidden md:block" /> {/* Collapse Sidebar Button */}
+            <div className="md:hidden"><Hamburger size={20} toggled={!sidebarCollapsed} /></div>
+          </Button>
+          <Button variant="outline" size="icon">
+            <IconStethoscope />
+          </Button>
+        </div>
+
+        {/* Content Segment */}
+        <div className="flex-1 flex justify-between items-center px-5 md:px-8">
+          <div>
+            <Link href={"/"}>
+              <Image src={"/logo.svg"} height={40} alt="mira.ai" width={0} className="w-auto dark:hidden" />
+              <Image src={"/logo-dark.svg"} height={40} alt="mira.ai" width={0} className="w-auto dark:block hidden" />
+            </Link>
+          </div>
+
+          <div className="flex items-center justify-center">
+            <div className="hidden md:flex items-center justify-center">
+              <ToggleTheme />
+              <Button variant="outline" size="icon" className="ml-2 mr-5">
+                <IconQuestionMark />
+              </Button>
+            </div>
+            <DropdownMenu>
+              <DropdownMenuTrigger>
+                <Avatar>
+                  <AvatarImage src="https://github.com/shadcn.png" />
+                  <AvatarFallback>CN</AvatarFallback>
+                </Avatar>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="mr-5 mt-2 w-40">
+                <DropdownMenuItem className="cursor-pointer"><IconSettings size={18} className="mr-2" /> Settings</DropdownMenuItem>
+                <DropdownMenuItem className="cursor-pointer"><IconCoin size={18} className="mr-2" /> Billing</DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem className="cursor-pointer text-destructive"><IconLogout size={18} className="mr-2" /> Logout</DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+        </div>
+      </div>
+
+      <div className="h-svh w-svw overflow-hidden flex">
+
+        {/* Sidebar */}
+        <div className={`chat-sidebar bg-background fixed h-svh md:static flex flex-col transition-all duration-300 ${sidebarCollapsed ? "-left-full md:w-0 md:overflow-x-hidden" : "left-0 w-svw md:w-60"}`}>
+          <div className={`mt-14 p-2 flex-1 overflow-y-scroll scrollbar transition-all duration-300 ${sidebarCollapsed ? "opacity-0" : "opacity-100"}`}>
+            <Button className="w-full mb-2 justify-start" variant="secondary" asChild>
+              <Link href={"/"}>
+                <IconLayoutGrid size={20} className="mr-2" /> Explore Models
+              </Link>
+            </Button>
+            <Button className="w-full justify-start" asChild>
+              <Link href={"/"}>
+                <IconPlus size={20} className="mr-2" /> New Consultation
+              </Link>
+            </Button>
+
+            <div className="my-4">
+              <div className="flex justify-between items-center mb-2 px-2 text-muted-foreground">
+                <span className="text-xs">Consult History</span>
+                <IconSearch cursor={"pointer"} size={14} onClick={() => setSearchOn(!searchOn)} />
+              </div>
+
+              {searchOn && (
+                <input
+                  type="text"
+                  placeholder="Search consults..."
+                  value={searchField}
+                  onChange={(e) => setSearchField(e.target.value)}
+                  className="w-full p-2 text-xs rounded bg-muted text-muted-foreground placeholder:text-muted-foreground"
+                />
+              )}
+            </div>
+
+            <ul className="space-y-1">
+              {filteredChats.map(chat => (
+                <li key={chat.id}>
+                  <Link
+                    href={`/c/${chat.id}`}
+                    className={`block rounded-lg px-4 py-2 text-xs font-medium ${
+                      Number(activeChatId) === chat.id
+                        ? "bg-secondary text-secondary-foreground"
+                        : "text-muted-foreground hover:bg-muted"
+                    }`}
+                  >
+                    {chat.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+
+        {/* Content Here */}
+        <div className="chat-content flex-1 bg-muted flex flex-col">
+          <div className="mt-14 overflow-y-scroll py-2 flex-1 scrollbar">
+            <div className="container">
+              {children} 
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
