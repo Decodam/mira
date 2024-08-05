@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { useParams } from 'next/navigation'
+import { useParams } from 'next/navigation';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -22,38 +22,59 @@ import {
   IconPlus,
   IconLayoutGrid,
   IconSearch,
+  IconSend,
+  IconPaperclip,
+  IconX,
 } from "@tabler/icons-react";
 import { Button } from "./ui/button";
 import { ToggleTheme } from "./ui/toggle-theme";
 import { Squeeze as Hamburger } from 'hamburger-react';
 
-export default function ChatLayout({ children }) {
+export default function ChatLayout({ children, formAction }) {
   const [searchOn, setSearchOn] = useState(false);
   const [searchField, setSearchField] = useState('');
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [InputText, setInputText] = useState('');
+  const [uploadedFile, setUploadedFile] = useState(null);
+  const [hoveredImage, setHoveredImage] = useState(false);
 
-  const params = useParams()
-  const activeChatId = params?.id; // Extract the id from the route parameters
+  const params = useParams();
+  const activeChatId = params?.id;
 
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth >= 768) {
-        setSidebarCollapsed(false); // Open sidebar on large screens
+        setSidebarCollapsed(false);
       } else {
-        setSidebarCollapsed(true); // Close sidebar on small screens
+        setSidebarCollapsed(true);
       }
     };
 
-    // Call handleResize on initial render
     handleResize();
 
-    // Add event listener to handle resize
     window.addEventListener('resize', handleResize);
 
     return () => {
       window.removeEventListener('resize', handleResize);
     };
   }, []);
+
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    setUploadedFile(file);
+  };
+
+  const handlePaperclipClick = () => {
+    document.getElementById('file-upload').click();
+  };
+
+  const handleImageHover = (hover) => {
+    setHoveredImage(hover);
+  };
+
+  const handleRemoveImage = () => {
+    setUploadedFile(null);
+  };
 
   const chatHistory = [
     { id: 1, name: 'Consultation about flu' },
@@ -66,6 +87,10 @@ export default function ChatLayout({ children }) {
   const filteredChats = chatHistory.filter(chat =>
     chat.name.toLowerCase().includes(searchField.toLowerCase())
   );
+
+  const formSubmitAction = () => {
+    formAction();
+  };
 
   return (
     <>
@@ -174,6 +199,52 @@ export default function ChatLayout({ children }) {
               {children} 
             </div>
           </div>
+
+          {formAction && (
+            <div className="md:container">
+              <form action={formSubmitAction} className="flex items-center p-2">
+                <div className="inputbox flex items-center w-full p-2 rounded-lg bg-accent">
+                  <IconPaperclip cursor="pointer" className="ml-4 mr-2" onClick={handlePaperclipClick} />
+                  {uploadedFile && (
+                    <div
+                      className="relative mr-4"
+                      onMouseEnter={() => handleImageHover(true)}
+                      onMouseLeave={() => handleImageHover(false)}
+                    >
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={URL.createObjectURL(uploadedFile)} alt="Uploaded Image" width={50} height={50} className="rounded" />
+                      {hoveredImage && (
+                        <button
+                          type="button"
+                          className="absolute top-0 right-0 p-1 bg-background rounded-full border"
+                          onClick={handleRemoveImage}
+                        >
+                          <IconX size={16} />
+                        </button>
+                      )}
+                    </div>
+                  )}
+                  <input
+                    type="text"
+                    value={InputText}
+                    onChange={(e) => {setInputText(e.target.value)}}
+                    placeholder="Type your message..."
+                    className="flex-1 px-2 py-1 rounded-lg bg-accent focus:outline-none text-muted-foreground"
+                  />
+                  <Button type="submit" variant="primary" className="ml-2">
+                    <IconSend />
+                  </Button>
+                </div>
+                <input
+                  type="file"
+                  id="file-upload"
+                  className="hidden"
+                  accept="image/*"
+                  onChange={handleFileChange}
+                />
+              </form>
+            </div>
+          )}
         </div>
       </div>
     </>
