@@ -18,13 +18,13 @@ import {
   IconLogout,
   IconQuestionMark,
   IconLayoutSidebar,
-  IconStethoscope,
   IconPlus,
   IconLayoutGrid,
   IconSearch,
   IconSend,
   IconPaperclip,
   IconX,
+  IconMessagePlus
 } from "@tabler/icons-react";
 import { Button } from "./ui/button";
 import { ToggleTheme } from "./ui/toggle-theme";
@@ -88,8 +88,12 @@ export default function ChatLayout({ children, formAction }) {
     chat.name.toLowerCase().includes(searchField.toLowerCase())
   );
 
-  const formSubmitAction = () => {
-    formAction();
+  const formSubmitAction = async() => {
+    const error = await formAction();
+
+    alert(error?.message)
+
+    setInputText(''); setUploadedFile(null);
   };
 
   return (
@@ -102,7 +106,7 @@ export default function ChatLayout({ children, formAction }) {
             <div className="md:hidden"><Hamburger size={20} toggled={!sidebarCollapsed} /></div>
           </Button>
           <Button variant="outline" size="icon">
-            <IconStethoscope />
+            <IconMessagePlus />
           </Button>
         </div>
 
@@ -110,8 +114,8 @@ export default function ChatLayout({ children, formAction }) {
         <div className="flex-1 flex justify-between items-center px-5 md:px-8">
           <div>
             <Link href={"/"}>
-              <Image src={"/logo.svg"} height={40} alt="mira.ai" width={0} className="w-auto dark:hidden" />
-              <Image src={"/logo-dark.svg"} height={40} alt="mira.ai" width={0} className="w-auto dark:block hidden" />
+              <Image src={"/mira.svg"} height={40} alt="mira.ai" width={0} className="w-auto dark:hidden" />
+              <Image src={"/mira-dark.svg"} height={40} alt="mira.ai" width={0} className="w-auto dark:block hidden" />
             </Link>
           </div>
 
@@ -168,7 +172,7 @@ export default function ChatLayout({ children, formAction }) {
                   placeholder="Search consults..."
                   value={searchField}
                   onChange={(e) => setSearchField(e.target.value)}
-                  className="w-full p-2 text-xs rounded bg-muted text-muted-foreground placeholder:text-muted-foreground"
+                  className="w-full p-2 text-xs rounded bg-accent text-accent-foreground placeholder:text-muted-foreground focus:outline-none"
                 />
               )}
             </div>
@@ -204,7 +208,7 @@ export default function ChatLayout({ children, formAction }) {
             <div className="md:container">
               <form action={formSubmitAction} className="flex items-center p-2">
                 <div className="inputbox flex items-center w-full p-2 rounded-lg bg-accent">
-                  <IconPaperclip cursor="pointer" className="ml-4 mr-2" onClick={handlePaperclipClick} />
+                  <IconPaperclip cursor="pointer" className="ml-4 mr-2 text-muted-foreground" onClick={handlePaperclipClick} />
                   {uploadedFile && (
                     <div
                       className="relative mr-4"
@@ -229,9 +233,9 @@ export default function ChatLayout({ children, formAction }) {
                     value={InputText}
                     onChange={(e) => {setInputText(e.target.value)}}
                     placeholder="Type your message..."
-                    className="flex-1 px-2 py-1 rounded-lg bg-accent focus:outline-none text-muted-foreground"
+                    className="flex-1 px-2 py-1 rounded-lg bg-accent focus:outline-none placeholder:text-muted-foreground"
                   />
-                  <Button type="submit" variant="primary" className="ml-2">
+                  <Button disabled={InputText === '' ? true : false} type="submit" variant="primary" className="ml-2 text-primary">
                     <IconSend />
                   </Button>
                 </div>
@@ -243,6 +247,11 @@ export default function ChatLayout({ children, formAction }) {
                   onChange={handleFileChange}
                 />
               </form>
+              <p style={{fontSize: 10}} className="text-xs text-center mb-1 text-muted-foreground">
+                Mira is still experimental and can make mistakes. Please do your own due diligence.
+                Made by <Link className="font-medium hover:underline" href="https://github.com/Decodam" target="_blank">@Decodam</Link> as part of Project Neurvox.
+              </p>
+
             </div>
           )}
         </div>
