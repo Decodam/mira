@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useParams } from 'next/navigation';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -29,6 +29,7 @@ import {
 import { Button } from "./ui/button";
 import { ToggleTheme } from "./ui/toggle-theme";
 import { Squeeze as Hamburger } from 'hamburger-react';
+import { MessageContext } from "@/context/message-provider";
 
 export default function ChatLayout({ children, formAction }) {
   const [searchOn, setSearchOn] = useState(false);
@@ -37,6 +38,8 @@ export default function ChatLayout({ children, formAction }) {
   const [InputText, setInputText] = useState('');
   const [uploadedFile, setUploadedFile] = useState(null);
   const [hoveredImage, setHoveredImage] = useState(false);
+  const {setLoading, loading, setMessages} = useContext(MessageContext);
+
 
   const params = useParams();
   const activeChatId = params?.id;
@@ -89,7 +92,7 @@ export default function ChatLayout({ children, formAction }) {
   );
 
   const formSubmitAction = async() => {
-    const error = await formAction();
+    const error = await formAction(InputText);
 
     alert(error?.message)
 
@@ -235,9 +238,20 @@ export default function ChatLayout({ children, formAction }) {
                     placeholder="Type your message..."
                     className="flex-1 px-2 py-1 rounded-lg bg-accent focus:outline-none placeholder:text-muted-foreground"
                   />
-                  <Button disabled={InputText === '' ? true : false} type="submit" variant="primary" className="ml-2 text-primary">
-                    <IconSend />
+                  
+                  <Button
+                    disabled={InputText === '' || loading}
+                    type="submit"
+                    variant="primary"
+                    className="ml-2 text-primary"
+                  >
+                    {loading ? (
+                      <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-primary"></div>
+                    ) : (
+                      <IconSend />
+                    )}
                   </Button>
+
                 </div>
                 <input
                   type="file"
