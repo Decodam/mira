@@ -101,7 +101,7 @@ export default function ChatLayout({ children, formAction }) {
 
   return (
     <>
-      <div className="chat-header fixed w-full top-0 left-0 z-10 h-14 flex">
+      <div className="chat-header fixed w-full top-0 left-0 z-20 h-14 flex">
         {/* Sidebar Segment */}
         <div className={`transition-all duration-300 ${sidebarCollapsed ? "w-auto" : "md:w-60"} flex gap-2 justify-between items-center px-4`}>
           <Button variant="outline" size="icon" onClick={() => setSidebarCollapsed(!sidebarCollapsed)}>
@@ -150,7 +150,7 @@ export default function ChatLayout({ children, formAction }) {
       <div className="h-svh w-svw overflow-hidden flex">
 
         {/* Sidebar */}
-        <div className={`chat-sidebar bg-background fixed h-svh md:static flex flex-col transition-all duration-300 ${sidebarCollapsed ? "-left-full md:w-0 md:overflow-x-hidden" : "left-0 w-svw md:w-60"}`}>
+        <div className={`chat-sidebar bg-background fixed z-10 h-svh md:static flex flex-col transition-all duration-300 ${sidebarCollapsed ? "-left-full md:w-0 md:overflow-x-hidden" : "left-0 w-svw md:w-60"}`}>
           <div className={`mt-14 p-2 flex-1 overflow-y-scroll scrollbar transition-all duration-300 ${sidebarCollapsed ? "opacity-0" : "opacity-100"}`}>
             <Button className="w-full mb-2 justify-start" variant="secondary" asChild>
               <Link href={"/"}>
@@ -201,7 +201,7 @@ export default function ChatLayout({ children, formAction }) {
 
         {/* Content Here */}
         <div className="chat-content flex-1 bg-muted flex flex-col">
-          <div className="mt-14 overflow-y-scroll py-2 flex-1 scrollbar">
+          <div id="content" className="mt-14 overflow-y-scroll py-2 flex-1 scrollbar">
             <div className="container">
               {children} 
             </div>
@@ -236,7 +236,7 @@ export default function ChatLayout({ children, formAction }) {
                     value={InputText}
                     onChange={(e) => {setInputText(e.target.value)}}
                     placeholder="Type your message..."
-                    className="flex-1 px-2 py-1 rounded-lg bg-accent focus:outline-none placeholder:text-muted-foreground"
+                    className="px-2 py-1 w-full rounded-lg bg-accent focus:outline-none placeholder:text-muted-foreground"
                   />
                   
                   <Button
@@ -261,7 +261,7 @@ export default function ChatLayout({ children, formAction }) {
                   onChange={handleFileChange}
                 />
               </form>
-              <p style={{fontSize: 10}} className="text-xs text-center mb-1 text-muted-foreground">
+              <p style={{fontSize: 10}} className="text-xs text-center mb-1 text-muted-foreground px-4">
                 Mira is still experimental and can make mistakes. Please do your own due diligence.
                 Made by <Link className="font-medium hover:underline" href="https://github.com/Decodam" target="_blank">@Decodam</Link> as part of Project Neurvox.
               </p>
