@@ -51,7 +51,7 @@ export default function ChatIDPage({}) {
             key={index}
             className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}
           >
-            <div className={`p-3 rounded-xl rounded-tr-none ${message.role === "user" && "bg-accent max-w-md"}`}>
+            <div className={`p-3 rounded-xl rounded-tr-none ${message.role === "user" && "bg-accent max-w-sm md:max-w-md"}`}>
               {message.parts.map((part, idx) => (
                 <p className="text-foreground" key={idx}>{part.text}</p>
               ))}

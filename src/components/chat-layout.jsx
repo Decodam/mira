@@ -201,14 +201,14 @@ export default function ChatLayout({ children, formAction }) {
 
         {/* Content Here */}
         <div className="chat-content flex-1 bg-muted flex flex-col">
-          <div id="content" className="mt-14 overflow-y-scroll py-2 flex-1 scrollbar">
+          <div id="content" className="mt-14 pb-20 md:py-5 overflow-y-scroll py-2 flex-1 scrollbar">
             <div className="container">
               {children} 
             </div>
           </div>
 
           {formAction && (
-            <div className="md:container">
+            <div className="fixed bottom-0 left-0 -z-0 bg-muted w-full md:static md:container">
               <form action={formSubmitAction} className="flex items-center p-2">
                 <div className="inputbox flex items-center w-full p-2 rounded-lg bg-accent">
                   <IconPaperclip cursor="pointer" className="ml-4 mr-2 text-muted-foreground" onClick={handlePaperclipClick} />
@@ -242,8 +242,7 @@ export default function ChatLayout({ children, formAction }) {
                   <Button
                     disabled={InputText === '' || loading}
                     type="submit"
-                    variant="primary"
-                    className="ml-2 text-primary"
+                    className="ml-2"
                   >
                     {loading ? (
                       <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-primary"></div>
