@@ -101,7 +101,7 @@ export default function ChatLayout({ children, formAction }) {
 
   return (
     <>
-      <div className="chat-header fixed w-full top-0 left-0 z-20 h-14 flex">
+      <div className="chat-header bg-muted fixed w-full top-0 left-0 z-20 h-14 flex">
         {/* Sidebar Segment */}
         <div className={`transition-all duration-300 ${sidebarCollapsed ? "w-auto" : "md:w-60"} flex gap-2 justify-between items-center px-4`}>
           <Button variant="outline" size="icon" onClick={() => setSidebarCollapsed(!sidebarCollapsed)}>
@@ -201,7 +201,7 @@ export default function ChatLayout({ children, formAction }) {
 
         {/* Content Here */}
         <div className="chat-content flex-1 bg-muted flex flex-col">
-          <div id="content" className="mt-14 pb-20 md:py-5 overflow-y-scroll py-2 flex-1 scrollbar">
+          <div id="content" className="mt-14 pb-28 md:py-5 overflow-y-scroll py-2 flex-1 scrollbar">
             <div className="container">
               {children} 
             </div>
