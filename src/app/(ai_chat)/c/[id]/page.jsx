@@ -33,6 +33,7 @@ export default function ChatIDPage({}) {
 
     return () => {
       if (messagesEndRef.current) {
+        // eslint-disable-next-line react-hooks/exhaustive-deps
         observer.unobserve(messagesEndRef.current);
       }
     };

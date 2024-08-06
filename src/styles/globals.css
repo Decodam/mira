@@ -57,7 +57,7 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground p-0;
   }
   .container{
     @apply max-w-screen-lg
