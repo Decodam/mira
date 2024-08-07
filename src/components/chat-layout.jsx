@@ -24,7 +24,8 @@ import {
   IconSend,
   IconPaperclip,
   IconX,
-  IconMessagePlus
+  IconMessagePlus,
+  IconLoader2
 } from "@tabler/icons-react";
 import { Button } from "./ui/button";
 import { ToggleTheme } from "./ui/toggle-theme";
@@ -101,7 +102,7 @@ export default function ChatLayout({ children, formAction }) {
 
   return (
     <>
-      <div className="chat-header bg-muted fixed w-full top-0 left-0 z-20 h-14 flex">
+      <div className="chat-header fixed w-full top-0 left-0 z-20 h-14 flex">
         {/* Sidebar Segment */}
         <div className={`transition-all duration-300 ${sidebarCollapsed ? "w-auto" : "md:w-60"} flex gap-2 justify-between items-center px-4`}>
           <Button variant="outline" size="icon" onClick={() => setSidebarCollapsed(!sidebarCollapsed)}>
@@ -150,8 +151,8 @@ export default function ChatLayout({ children, formAction }) {
       <div className="h-svh w-svw overflow-hidden flex">
 
         {/* Sidebar */}
-        <div className={`chat-sidebar bg-background fixed z-10 h-svh md:static flex flex-col transition-all duration-300 ${sidebarCollapsed ? "-left-full md:w-0 md:overflow-x-hidden" : "left-0 w-svw md:w-60"}`}>
-          <div className={`mt-14 p-2 flex-1 overflow-y-scroll scrollbar transition-all duration-300 ${sidebarCollapsed ? "opacity-0" : "opacity-100"}`}>
+        <div className={`chat-sidebar bg-background border-r border-border fixed z-10 h-svh md:static flex flex-col transition-all duration-300 ${sidebarCollapsed ? "-left-full md:w-0 md:overflow-x-hidden" : "left-0 w-svw md:w-60"}`}>
+          <div className={`mt-14 p-2 flex-1 overflow-y-scroll hide-scrollbar scrollbar transition-all duration-300 ${sidebarCollapsed ? "opacity-0" : "opacity-100"}`}>
             <Button className="w-full mb-2 justify-start" variant="secondary" asChild>
               <Link href={"/"}>
                 <IconLayoutGrid size={20} className="mr-2" /> Explore Models
@@ -175,7 +176,7 @@ export default function ChatLayout({ children, formAction }) {
                   placeholder="Search consults..."
                   value={searchField}
                   onChange={(e) => setSearchField(e.target.value)}
-                  className="w-full p-2 text-xs rounded bg-accent text-accent-foreground placeholder:text-muted-foreground focus:outline-none"
+                  className="w-full p-2 text-xs rounded-lg bg-muted text-accent-foreground placeholder:text-muted-foreground focus:outline-none"
                 />
               )}
             </div>
@@ -200,15 +201,15 @@ export default function ChatLayout({ children, formAction }) {
         </div>
 
         {/* Content Here */}
-        <div className="chat-content flex-1 bg-muted flex flex-col">
-          <div id="content" className="mt-14 pb-28 md:py-5 overflow-y-scroll py-2 flex-1 scrollbar">
+        <div className="chat-content flex-1 bg-card flex flex-col">
+          <div id="content" className="mt-14 mb-28 md:mb-0 overflow-y-scroll py-2 flex-1 scrollbar">
             <div className="container">
               {children} 
             </div>
           </div>
 
           {formAction && (
-            <div className="fixed bottom-0 left-0 -z-0 bg-muted w-full md:static md:container">
+            <div className="fixed bottom-0 left-0 -z-0 w-full md:static md:container">
               <form action={formSubmitAction} className="flex items-center p-2">
                 <div className="inputbox flex items-center w-full p-2 rounded-lg bg-accent">
                   <IconPaperclip cursor="pointer" className="ml-4 mr-2 text-muted-foreground" onClick={handlePaperclipClick} />
@@ -245,7 +246,7 @@ export default function ChatLayout({ children, formAction }) {
                     className="ml-2"
                   >
                     {loading ? (
-                      <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-primary"></div>
+                      <IconLoader2 className="animate-spin" />
                     ) : (
                       <IconSend />
                     )}
