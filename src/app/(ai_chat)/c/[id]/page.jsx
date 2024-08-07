@@ -2,7 +2,7 @@
 import ChatLayout from "@/components/chat-layout";
 import { MessageContext } from "@/context/message-provider";
 import { useContext, useEffect, useRef, useState } from "react";
-import { chatToGemini } from "@/lib/gemini.ai";
+import { chatToGemini } from "@/utils/client/gemini.ai";
 import { IconChevronDown } from "@tabler/icons-react";
 import { Button } from "@/components/ui/button";
 

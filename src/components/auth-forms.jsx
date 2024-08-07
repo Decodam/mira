@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label"
 import { useState } from "react"
 import { IconLoader2 } from "@tabler/icons-react"
 import Image from "next/image"
-import { PasswordInput } from "@/components/ui/password-input"
+import { checkPasswordError } from "@/utils/client/ui.utils"
 
 
 export function LoginForm({ borderless, icon }) {
@@ -17,19 +17,33 @@ export function LoginForm({ borderless, icon }) {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
+  const resetForm = () => {
+    setEmail('');
+    setPassword('');
+    setError('');
+    setLoading(false);
+  }
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Add your login logic here
-    console.log({ email, password });
-  };
+    
+    const passwordError = checkPasswordError(password);
+
+    if (passwordError) {
+      setError(passwordError);
+      return;
+    }
+
+    resetForm();
+  }
 
   return (
-    <Card className={`mx-auto ${borderless && "border-none shadow-none"} max-w-sm`}>
+    <Card className={`mx-auto ${borderless && "border-none shadow-none"} max-w-sm max-md:shadow-none max-md:border-none max-md:bg-background`}>
       {icon && (
         <div className="flex justify-center items-center mt-5">
           <Link href={"/"}>
-            <Image src={"/icon.svg"} height={0} alt="mira.ai" width={0} className="w-auto dark:hidden" />
-            <Image src={"/icon-dark.svg"} height={0} alt="mira.ai" width={0} className="w-auto dark:block hidden" />
+            <Image src={"/mira.svg"} height={0} alt="mira.ai" width={0} className="w-auto dark:hidden" />
+            <Image src={"/mira-dark.svg"} height={0} alt="mira.ai" width={0} className="w-auto dark:block hidden" />
           </Link>
         </div>
       )}
@@ -40,7 +54,7 @@ export function LoginForm({ borderless, icon }) {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        {error && <p className="text-xs mb-4 text-destructive text-center">{error}</p>}
+        {error && <p className="text-xs mb-6 text-destructive text-center">{error}</p>}
         <form onSubmit={handleSubmit} className="grid gap-4">
           <div className="grid gap-2">
             <Label htmlFor="email">Email</Label>
@@ -60,7 +74,7 @@ export function LoginForm({ borderless, icon }) {
                 Forgot your password?
               </Link>
             </div>
-            <PasswordInput
+            <Input
               strongPassword={true}
               id="password"
               type="password"
@@ -69,7 +83,7 @@ export function LoginForm({ borderless, icon }) {
               required
             />
           </div>
-          <Button disabled={loading} type="submit" className="w-full">
+          <Button disabled={loading} size="lg" type="submit" className="w-full">
             {loading ? (
               <IconLoader2 className="animate-spin" />
             ) : (
@@ -108,19 +122,43 @@ export function SignUpForm({ borderless, icon }) {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
+  const resetForm = () => {
+    setFirstName('');
+    setLastName('');
+    setEmail('');
+    setPassword('');
+    setPassword2('');
+    setError('');
+    setLoading(false);
+  }
+
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Add your sign-up logic here
-    console.log({ firstName, lastName, email, password });
+    
+    if (password !== password2){
+      setError("The passwords do not match");
+      return;
+    }
+
+    const passwordError = checkPasswordError(password);
+
+    if (passwordError) {
+      setError(passwordError);
+      return;
+    }
+
+
+    resetForm();
   };
 
   return (
-    <Card className={`mx-auto ${borderless && "border-none shadow-none"} max-w-sm`}>
+    <Card className={`mx-auto ${borderless && "border-none shadow-none"} max-w-sm max-md:shadow-none max-md:border-none max-md:bg-background`}>
       {icon && (
         <div className="flex justify-center items-center mt-5">
           <Link href={"/"}>
-            <Image src={"/icon.svg"} height={0} alt="mira.ai" width={0} className="w-auto dark:hidden" />
-            <Image src={"/icon-dark.svg"} height={0} alt="mira.ai" width={0} className="w-auto dark:block hidden" />
+            <Image src={"/mira.svg"} height={0} alt="mira.ai" width={0} className="w-auto dark:hidden" />
+            <Image src={"/mira-dark.svg"} height={0} alt="mira.ai" width={0} className="w-auto dark:block hidden" />
           </Link>
         </div>
       )}
@@ -131,7 +169,7 @@ export function SignUpForm({ borderless, icon }) {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        {error && <p className="text-xs mb-4 text-destructive text-center">{error}</p>}
+        {error && <p className="text-xs mb-6 text-destructive text-center">{error}</p>}
         <form onSubmit={handleSubmit} className="grid gap-4">
           <div className="grid grid-cols-2 gap-4">
             <div className="grid gap-2">
@@ -180,13 +218,13 @@ export function SignUpForm({ borderless, icon }) {
             <Label htmlFor="password2">Confirm Password</Label>
             <Input
               id="password2"
-              type="password2"
+              type="password"
               value={password2}
               onChange={(e) => setPassword2(e.target.value)}
               required
             />
           </div>
-          <Button disabled={loading} type="submit" className="w-full">
+          <Button disabled={loading} size="lg" type="submit" className="w-full">
             {loading ? (
               <IconLoader2 className="animate-spin" />
             ) : (
