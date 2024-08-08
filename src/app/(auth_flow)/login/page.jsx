@@ -1,4 +1,4 @@
-import { LoginForm } from "@/components/auth-forms";
+import { LoginForm } from "@/components/content/auth-forms";
 import { Button } from "@/components/ui/button";
 import { ToggleTheme } from "@/components/ui/toggle-theme";
 import Link from "next/link";

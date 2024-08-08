@@ -1,22 +1,9 @@
 'use client';
 
-import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect, useContext } from "react";
 import { useParams } from 'next/navigation';
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import {
-  IconSettings,
-  IconCoin,
-  IconLogout,
-  IconQuestionMark,
   IconLayoutSidebar,
   IconPlus,
   IconLayoutGrid,
@@ -28,9 +15,9 @@ import {
   IconLoader2
 } from "@tabler/icons-react";
 import { Button } from "./ui/button";
-import { ToggleTheme } from "./ui/toggle-theme";
 import { Squeeze as Hamburger } from 'hamburger-react';
 import { MessageContext } from "@/context/message-provider";
+import HeaderUser from "./content/header-user";
 
 export default function ChatLayout({ children, formAction }) {
   const [searchOn, setSearchOn] = useState(false);
@@ -44,6 +31,7 @@ export default function ChatLayout({ children, formAction }) {
 
   const params = useParams();
   const activeChatId = params?.id;
+
 
   useEffect(() => {
     const handleResize = () => {
@@ -115,37 +103,7 @@ export default function ChatLayout({ children, formAction }) {
         </div>
 
         {/* Content Segment */}
-        <div className="flex-1 flex justify-between items-center px-5 md:px-8">
-          <div>
-            <Link href={"/"}>
-              <Image src={"/mira.svg"} height={40} alt="mira.ai" width={0} className="w-auto dark:hidden" />
-              <Image src={"/mira-dark.svg"} height={40} alt="mira.ai" width={0} className="w-auto dark:block hidden" />
-            </Link>
-          </div>
-
-          <div className="flex items-center justify-center">
-            <div className="hidden md:flex items-center justify-center">
-              <ToggleTheme />
-              <Button variant="outline" size="icon" className="ml-2 mr-5">
-                <IconQuestionMark />
-              </Button>
-            </div>
-            <DropdownMenu>
-              <DropdownMenuTrigger>
-                <Avatar>
-                  <AvatarImage src="https://github.com/shadcn.png" />
-                  <AvatarFallback>CN</AvatarFallback>
-                </Avatar>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="mr-5 mt-2 w-40">
-                <DropdownMenuItem className="cursor-pointer"><IconSettings size={18} className="mr-2" /> Settings</DropdownMenuItem>
-                <DropdownMenuItem className="cursor-pointer"><IconCoin size={18} className="mr-2" /> Billing</DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem className="cursor-pointer text-destructive"><IconLogout size={18} className="mr-2" /> Logout</DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
-        </div>
+        <HeaderUser />
       </div>
 
       <div className="h-svh w-svw overflow-hidden flex">

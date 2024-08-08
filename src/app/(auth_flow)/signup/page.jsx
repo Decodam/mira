@@ -1,4 +1,4 @@
-import { SignUpForm } from "@/components/auth-forms";
+import { SignUpForm } from "@/components/content/auth-forms";
 import { Button } from "@/components/ui/button";
 import { ToggleTheme } from "@/components/ui/toggle-theme";
 import Link from "next/link";

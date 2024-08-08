@@ -9,6 +9,8 @@ import { useState } from "react"
 import { IconLoader2 } from "@tabler/icons-react"
 import Image from "next/image"
 import { checkPasswordError } from "@/utils/client/ui.utils"
+import { signup, login } from "@/utils/server/auth.actions";
+
 
 
 export function LoginForm({ borderless, icon }) {
@@ -24,15 +26,32 @@ export function LoginForm({ borderless, icon }) {
     setLoading(false);
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
+
+    setLoading(true);
     
     const passwordError = checkPasswordError(password);
 
     if (passwordError) {
       setError(passwordError);
+      setLoading(false);
       return;
     }
+
+    const data = {
+      email: email,
+      password: password
+    }
+
+    const signInError = await login(data);
+
+    if (signInError) {
+      setError(signInError.message);
+      setLoading(false);
+      return;
+    }
+
 
     resetForm();
   }
@@ -133,11 +152,14 @@ export function SignUpForm({ borderless, icon }) {
   }
 
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
     
+    setLoading(true);
+
     if (password !== password2){
       setError("The passwords do not match");
+      setLoading(false);
       return;
     }
 
@@ -145,9 +167,23 @@ export function SignUpForm({ borderless, icon }) {
 
     if (passwordError) {
       setError(passwordError);
+      setLoading(false);
       return;
     }
 
+    const data = {
+      email: email,
+      password: password,
+      full_name: firstName + ' ' + lastName
+    }
+
+    const signUpError = await signup(data);
+
+    if (signUpError) {
+      setError(signUpError.message);
+      setLoading(false);
+      return;
+    }
 
     resetForm();
   };

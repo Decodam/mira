@@ -1,5 +1,5 @@
 import ChatLayout from "@/components/chat-layout";
-import DescriptionCard from "@/components/description-card";
+import DescriptionCard from "@/components/content/description-card";
 import Image from "next/image";
 import { IconClipboard, IconHeartbeat, IconStethoscope, IconAmbulance } from "@tabler/icons-react"; // Import icons
 
