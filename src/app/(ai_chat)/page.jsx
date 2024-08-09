@@ -4,8 +4,9 @@ import Image from "next/image";
 import { IconClipboard, IconHeartbeat, IconStethoscope, IconAmbulance } from "@tabler/icons-react"; // Import icons
 
 export default function HomePage() {
-  const demoFunction = async () => {
+  const submitFunction = async () => {
     'use server';
+    
     return {message: 'message is good'};
   };
 
@@ -17,7 +18,7 @@ export default function HomePage() {
   ];
 
   return (
-    <ChatLayout formAction={demoFunction}>
+    <ChatLayout formAction={submitFunction}>
       <div className="mt-10 md:mt-20">
         <Image src={"/icon.svg"} alt="mira.ai" height={60} width={60} className="mx-auto"/>
         <p className="mx-auto max-w-lg text-center mt-4 text-sm font-medium text-muted-foreground">
